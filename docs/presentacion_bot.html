@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOR Trading System — Cómo funciona</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.65;
+    color: #1a1a2e;
+    background: #fff;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 32px 40px;
+  }
+
+  /* ── PAGE BREAKS ─────────────────────────────── */
+  .page-break { page-break-before: always; }
+  @media print {
+    body { padding: 20px 28px; font-size: 10pt; }
+    .no-print { display: none; }
+  }
+
+  /* ── COVER ───────────────────────────────────── */
+  .cover {
+    text-align: center;
+    padding: 60px 20px 50px;
+    border-bottom: 3px solid #0d6efd;
+    margin-bottom: 40px;
+  }
+  .cover .badge {
+    display: inline-block;
+    background: #0d6efd;
+    color: #fff;
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .cover h1 {
+    font-size: 28pt;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 8px;
+  }
+  .cover h2 {
+    font-size: 14pt;
+    font-weight: 300;
+    color: #555;
+    margin-bottom: 30px;
+  }
+  .cover .meta {
+    font-size: 10pt;
+    color: #888;
+  }
+
+  /* ── SECTIONS ────────────────────────────────── */
+  h2.section-title {
+    font-size: 16pt;
+    font-weight: 700;
+    color: #0d6efd;
+    border-left: 5px solid #0d6efd;
+    padding-left: 12px;
+    margin: 36px 0 14px;
+  }
+  h3.sub-title {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 22px 0 8px;
+  }
+  p { margin-bottom: 10px; }
+  ul, ol { margin: 8px 0 12px 24px; }
+  li { margin-bottom: 5px; }
+
+  /* ── HIGHLIGHT BOXES ─────────────────────────── */
+  .box {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+  }
+  .box-blue  { background: #e8f0fe; border-left: 4px solid #0d6efd; }
+  .box-green { background: #e6f4ea; border-left: 4px solid #34a853; }
+  .box-amber { background: #fef9e7; border-left: 4px solid #f39c12; }
+  .box-red   { background: #fce8e8; border-left: 4px solid #d93025; }
+  .box strong { display: block; margin-bottom: 4px; font-size: 10pt; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── FLOW DIAGRAM ────────────────────────────── */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 18px 0;
+  }
+  .flow-step {
+    background: #0d6efd;
+    color: #fff;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 9.5pt;
+    font-weight: 600;
+    text-align: center;
+    min-width: 90px;
+  }
+  .flow-step.alt { background: #198754; }
+  .flow-arrow {
+    font-size: 16pt;
+    color: #aaa;
+  }
+
+  /* ── TABLE ───────────────────────────────────── */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 10pt; }
+  th { background: #0d6efd; color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; }
+  td { padding: 7px 10px; border-bottom: 1px solid #e0e0e0; }
+  tr:nth-child(even) td { background: #f5f8ff; }
+
+  /* ── METRIC CARDS ────────────────────────────── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 18px 0;
+  }
+  .card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .card .num { font-size: 20pt; font-weight: 700; color: #0d6efd; }
+  .card .lbl { font-size: 9pt; color: #666; }
+
+  /* ── FOOTER ──────────────────────────────────── */
+  .footer {
+    margin-top: 50px;
+    padding-top: 14px;
+    border-top: 1px solid #ddd;
+    font-size: 9pt;
+    color: #999;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     PORTADA
+═══════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="badge">Documento interno</div>
+  <h1>NOR Trading System</h1>
+  <h2>Cómo funciona nuestro bot de Market Making</h2>
+  <p style="font-size:11pt;color:#333;max-width:500px;margin:0 auto 20px;">
+    Una explicación completa del sistema automatizado de cotización
+    en futuros de dólar y soja, desde el concepto hasta el día a día operativo.
+  </p>
+  <div class="meta">Junio 2026 &nbsp;·&nbsp; Uso interno &nbsp;·&nbsp; Mercados: reMarkets ROFX</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     1. EL PROBLEMA QUE RESUELVE
+═══════════════════════════════════════════════ -->
+<h2 class="section-title">1. ¿Qué problema resuelve?</h2>
+
+<p>
+  En los mercados de futuros argentinos (reMarkets / ROFX), el spread entre
+  el precio de compra y el de venta puede ser ancho e irregular.
+  Los operadores que quieren entrar o salir del mercado pagan ese costo en cada operación.
+</p>
+
+<p>
+  Nuestro sistema actúa como <strong>proveedor de liquidez</strong>:
+  coloca permanentemente una oferta de compra y una de venta
+  alrededor del precio justo del activo, cobrando una pequeña diferencia
+  (el <em>spread</em>) a cambio del servicio. Esto se llama
+  <strong>Market Making</strong>.
+</p>
+
+<div class="box box-blue">
+  <strong>Analogía simple</strong>
+  Es similar a una casa de cambio: compra a $X y vende a $X + una comisión.
+  La ganancia viene del volumen de transacciones, no de apostar a la dirección del precio.
+</div>
+
+<div class="cards">
+  <div class="card">
+    <div class="num">~3.4</div>
+    <div class="lbl">bps de spread objetivo<br>(DLR/JUN26)</div>
+  </div>
+  <div class="card">
+    <div class="num">24×7</div>
+    <div class="lbl">monitoreo automático<br>(bot siempre activo)</div>
+  </div>
+  <div class="card">
+    <div class="num">&lt; 1s</div>
+    <div class="lbl">tiempo de reacción<br>ante cambios de precio</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     2. LOS INSTRUMENTOS
+═══════════════════════════════════════════════ -->
+<h2 class="section-title">2. ¿En qué mercados opera?</h2>
+
+<table>
+  <thead>
+    <tr><th>Bot</th><th>Instrumento</th><th>Contrato</th><th>Horario</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MM DLR</strong></td>
+      <td>Futuro de Dólar (estándar)</td>
+      <td>DLR/JUN26</td>
+      <td>10:00 – 15:00</td>
+    </tr>
+    <tr>
+      <td><strong>MM DLR Mini</strong></td>
+      <td>Futuro de Dólar (mini, lote menor)</td>
+      <td>DLR/JUN26M</td>
+      <td>10:00 – 15:00</td>
+    </tr>
+    <tr>
+      <td><strong>MM SOJ</strong></td>
+      <td>Futuro de Soja Rosario</td>
+      <td>SOJ.ROS/JUL26</td>
+      <td>11:00 – 17:00</td>
+    </tr>
+    <tr>
+      <td><strong>MM SOJ Mini</strong></td>
+      <td>Futuro de Soja (mini)</td>
+      <td>SOJ.MIN/JUL26</td>
+      <td>11:00 – 17:00</td>
+    </tr>
+    <tr>
+      <td><strong>CS DLR</strong></td>
+      <td>Calendar Spread (diferencial entre vencimientos)</td>
+      <td>MAY26 vs JUN26</td>
+      <td>10:00 – 15:00</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  Cada contrato tiene una fecha de vencimiento. El sistema detecta automáticamente
+  cuándo se acerca el vencimiento y <strong>rota al contrato siguiente</strong>
+  sin intervención manual.
+</p>
+
+
+<!-- ═══════════════════════════════════════════════
+     3. CICLO DE OPERACIÓN
+═══════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h2 class="section-title">3. ¿Cómo opera el bot en cada ciclo?</h2>
+
+<p>
+  Cada fracción de segundo, el bot repite el siguiente ciclo de forma automática:
+</p>
+
+<div class="flow">
+  <div class="flow-step">1. Lee el mercado</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">2. Calcula precio justo</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">3. Define sus cotizaciones</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step alt">4. Envía órdenes</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step alt">5. Gestiona riesgo</div>
+</div>
+
+<h3 class="sub-title">Paso 1 — Leer el mercado</h3>
+<p>
+  El bot recibe en tiempo real el <em>order book</em> del mercado:
+  el mejor precio de compra (<em>bid</em>) y el mejor de venta (<em>ask</em>).
+  También registra cuántos contratos hay disponibles a cada precio (profundidad).
+</p>
+
+<h3 class="sub-title">Paso 2 — Calcular el precio justo (<em>fair value</em>)</h3>
+<p>
+  El bot estima el precio "teórico" del activo en base al punto medio del mercado
+  y ajusta según el flujo de órdenes reciente (<em>Order Flow Imbalance, OFI</em>):
+  si hay muchas más órdenes de compra que de venta, el precio tiende a subir,
+  y el bot ajusta su estimación en consecuencia.
+</p>
+
+<h3 class="sub-title">Paso 3 — Definir las cotizaciones</h3>
+<p>
+  A partir del precio justo, el bot calcula dónde poner su <strong>oferta de compra</strong>
+  y su <strong>oferta de venta</strong>. El gap entre ambas es el <em>spread</em>,
+  que es la ganancia potencial por operación.
+</p>
+<p>
+  Dos factores ajustan estas cotizaciones automáticamente:
+</p>
+<ul>
+  <li>
+    <strong>Inventory Skew (sesgo de inventario):</strong>
+    Si el bot compró más de lo que vendió y tiene posición larga,
+    baja ligeramente los precios para incentivar ventas y reducir riesgo.
+    Hace lo inverso si está vendido.
+  </li>
+  <li>
+    <strong>Adverse Selection (detección de flujo adverso):</strong>
+    Si detecta que alguien opera contra el bot de forma sistemática
+    (probable trader informado), amplía temporalmente el spread para protegerse.
+  </li>
+</ul>
+
+<h3 class="sub-title">Paso 4 — Enviar órdenes al broker</h3>
+<p>
+  El bot cancela sus cotizaciones anteriores y envía dos nuevas órdenes límite:
+  una de compra y una de venta, simultáneamente, al exchange reMarkets.
+  El broker confirma la recepción en milisegundos.
+</p>
+
+<h3 class="sub-title">Paso 5 — Gestionar riesgo</h3>
+<p>
+  En cada ciclo el bot verifica que no se estén violando los límites de riesgo
+  (posición máxima, pérdida máxima, etc.).
+  Si detecta una violación, activa los mecanismos de protección descritos más adelante.
+</p>
+
+<div class="box box-green">
+  <strong>En la práctica</strong>
+  Un bot corriendo en condiciones normales ejecuta entre 50 y 200 ciclos por hora,
+  enviando y cancelando pares de órdenes continuamente. La posición neta
+  se mantiene cerca de cero la mayor parte del tiempo.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     4. CUANDO OCURRE UN FILL
+═══════════════════════════════════════════════ -->
+<h2 class="section-title">4. ¿Qué pasa cuando alguien compra o vende contra el bot?</h2>
+
+<p>
+  Cuando otro operador acepta la cotización del bot, se produce un <strong>fill</strong>
+  (ejecución). Por ejemplo:
+</p>
+
+<div class="box box-amber">
+  <strong>Ejemplo de operación exitosa</strong>
+  El bot cotiza BUY @ $1480 y SELL @ $1481 (spread = $1).
+  Un operador vende al bot a $1480 → el bot queda largo (compró 1 contrato).
+  Minutos después, otro operador compra al bot a $1481 → el bot cierra la posición.
+  <strong>Ganancia neta: $1 por contrato.</strong>
+</div>
+
+<p>
+  Cada fill queda registrado en un archivo CSV de la sesión del día,
+  y el sistema valida en tiempo real que lo que el broker dice que ocurrió
+  coincide con el registro propio (<em>reconciliación</em>).
+</p>
+
+
+<!-- ═══════════════════════════════════════════════
+     5. GESTIÓN DE RIESGO
+═══════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h2 class="section-title">5. ¿Cómo se controla el riesgo?</h2>
+
+<p>
+  El sistema tiene múltiples capas de protección, desde las más sutiles
+  hasta el cierre de emergencia:
+</p>
+
+<h3 class="sub-title">Capa 1 — Límites por parámetro</h3>
+<table>
+  <thead>
+    <tr><th>Parámetro</th><th>Qué controla</th><th>Valor típico (DLR)</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Posición máxima</td>
+      <td>Máximo de contratos que puede tener abiertos</td>
+      <td>±5 contratos</td>
+    </tr>
+    <tr>
+      <td>Pérdida diaria máxima</td>
+      <td>Si la pérdida acumulada supera este límite, el bot para</td>
+      <td>-$200 ARS</td>
+    </tr>
+    <tr>
+      <td>Spread mínimo</td>
+      <td>No cotiza si el mercado tiene spread inferior al mínimo</td>
+      <td>3.37 bps</td>
+    </tr>
+    <tr>
+      <td>Volatilidad</td>
+      <td>Amplía el spread propio cuando el mercado se mueve rápido</td>
+      <td>dinámico</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">Capa 2 — Circuit Breakers (disyuntores automáticos)</h3>
+<p>
+  Tres condiciones adicionales que, al activarse, detienen el bot inmediatamente:
+</p>
+<ul>
+  <li>
+    <strong>Guarda de PnL:</strong>
+    si la pérdida realizada supera -$200 ARS, el bot se apaga.
+  </li>
+  <li>
+    <strong>Tormenta de brechas de riesgo:</strong>
+    si se detectan más de 100 alertas de riesgo en 60 minutos (patrón anómalo), el bot para.
+  </li>
+  <li>
+    <strong>Desvío de posición vs registros:</strong>
+    si la posición interna difiere del registro CSV en más de 1 contrato, el bot para.
+  </li>
+</ul>
+
+<h3 class="sub-title">Capa 3 — Emergency Flatten (aplanamiento de emergencia)</h3>
+<p>
+  Si el módulo de riesgo detecta que la posición es insostenible,
+  el bot cancela todas sus órdenes activas y envía una orden agresiva
+  para cerrar la posición inmediatamente, aunque sea a un precio
+  ligeramente peor que el mercado.
+</p>
+
+<h3 class="sub-title">Capa 4 — Kill Switch (botón de corte)</h3>
+<p>
+  Un interruptor global que, al activarse (manual o automático),
+  cancela todas las órdenes y bloquea cualquier nueva cotización
+  hasta que se reinicie explícitamente.
+</p>
+
+<div class="box box-red">
+  <strong>Protección de sesión del broker</strong>
+  reMarkets cancela automáticamente las órdenes activas del día (<em>DAY orders</em>)
+  si detecta que la conexión del bot se interrumpió. Esto evita
+  que queden órdenes "huérfanas" vivas si el programa se cae abruptamente.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     6. RECONCILIACIÓN
+═══════════════════════════════════════════════ -->
+<h2 class="section-title">6. Reconciliación — el auditor interno</h2>
+
+<p>
+  El sistema mantiene dos registros en paralelo: el propio (archivos CSV locales)
+  y el del broker (API de reMarkets). Dos veces por día, un script compara ambos:
+</p>
+
+<div class="flow">
+  <div class="flow-step">CSV local<br><small>(registro de fills)</small></div>
+  <div class="flow-arrow">==</div>
+  <div class="flow-step alt">Posición broker<br><small>(API reMarkets)</small></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step" style="background:#198754">Drift = 0<br><small>✓ OK</small></div>
+</div>
+
+<p>
+  Si hay diferencia (<em>drift</em>), se genera una alerta y el operador
+  puede revisar qué ocurrió antes de seguir operando.
+  En la sesión de hoy (24/06/2026) la reconciliación cerró con <strong>drift = 0</strong>.
+</p>
+
+
+<!-- ═══════════════════════════════════════════════
+     7. INFRAESTRUCTURA
+═══════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h2 class="section-title">7. Infraestructura — ¿cómo está montado?</h2>
+
+<table>
+  <thead>
+    <tr><th>Componente</th><th>Tecnología</th><th>Rol</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Lenguaje de programación</td>
+      <td>Python 3.12</td>
+      <td>Todo el sistema</td>
+    </tr>
+    <tr>
+      <td>Conexión al broker</td>
+      <td>pyRofex 0.5 (WebSocket + REST)</td>
+      <td>Datos de mercado y órdenes en tiempo real</td>
+    </tr>
+    <tr>
+      <td>Dashboard de control</td>
+      <td>Streamlit (puerto 8502)</td>
+      <td>Iniciar/parar bots, ver PnL y posiciones</td>
+    </tr>
+    <tr>
+      <td>Hardware</td>
+      <td>PC local (Windows)</td>
+      <td>Todos los procesos corren localmente</td>
+    </tr>
+    <tr>
+      <td>Logs</td>
+      <td>Archivos .log y .csv en disco</td>
+      <td>Auditoría, reconciliación, análisis posterior</td>
+    </tr>
+    <tr>
+      <td>Heartbeat</td>
+      <td>JSON en disco (data/heartbeats/)</td>
+      <td>Estado en tiempo real de cada bot; alerta si se detiene</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">Diagrama de componentes</h3>
+
+<div style="border:1px solid #ddd;border-radius:8px;padding:20px;font-size:9.5pt;font-family:monospace;background:#f8f9fa;line-height:2;">
+  <strong style="font-family:sans-serif;font-size:10pt;">reMarkets ROFX (broker)</strong><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;↕ WebSocket (datos de mercado en tiempo real)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;↕ REST API (envío y cancelación de órdenes)<br>
+  <strong style="font-family:sans-serif;font-size:10pt;">PC Local</strong><br>
+  &nbsp;&nbsp;├── runners/run_mm.py &nbsp;→&nbsp; <em>proceso bot MM DLR</em><br>
+  &nbsp;&nbsp;├── runners/run_mm.py &nbsp;→&nbsp; <em>proceso bot MM SOJ</em><br>
+  &nbsp;&nbsp;├── runners/run_cs.py &nbsp;→&nbsp; <em>proceso bot Calendar Spread</em><br>
+  &nbsp;&nbsp;├── data/heartbeats/ &nbsp;&nbsp;→&nbsp; <em>archivos JSON de estado</em><br>
+  &nbsp;&nbsp;├── logs/fills/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→&nbsp; <em>registro CSV de operaciones</em><br>
+  &nbsp;&nbsp;└── dashboard/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→&nbsp; <em>interfaz web de control</em>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     8. DASHBOARD
+═══════════════════════════════════════════════ -->
+<h2 class="section-title">8. El dashboard — panel de control</h2>
+
+<p>
+  El operador interactúa con el sistema a través de una interfaz web
+  que se abre en el navegador. Desde ahí puede:
+</p>
+
+<ul>
+  <li>Ver el estado de cada bot (corriendo / parado / crashed)</li>
+  <li>Arrancar o detener bots individualmente</li>
+  <li>Ver el PnL acumulado en tiempo real</li>
+  <li>Ver las últimas operaciones ejecutadas</li>
+  <li>Monitorear la posición neta total del fondo</li>
+  <li>Activar el botón de emergencia (cancela todo y para todos los bots)</li>
+  <li>Ver alertas si un bot lleva más de 60 segundos sin actividad (posible problema)</li>
+</ul>
+
+<div class="box box-blue">
+  <strong>Sistema de alerta de salud (Heartbeat)</strong>
+  Cada bot escribe un archivo de "latido" cada 10 segundos con su estado actual.
+  Si el dashboard detecta que el último latido tiene más de 60 segundos de antigüedad,
+  muestra una alerta amarilla. Si supera los 5 minutos, muestra una alerta roja crítica.
+  Esto permite detectar problemas antes de que tengan impacto operativo.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     9. DÍA A DÍA OPERATIVO
+═══════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h2 class="section-title">9. ¿Cómo es un día operativo típico?</h2>
+
+<table>
+  <thead>
+    <tr><th>Hora</th><th>Acción</th><th>¿Automático?</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>09:45</td>
+      <td>El operador abre el dashboard y verifica el estado inicial</td>
+      <td>Manual</td>
+    </tr>
+    <tr>
+      <td>09:55</td>
+      <td>Arranca los bots desde el dashboard (1 click por bot)</td>
+      <td>Manual</td>
+    </tr>
+    <tr>
+      <td>10:00</td>
+      <td>Mercado abre — los bots empiezan a cotizar automáticamente</td>
+      <td>Automático</td>
+    </tr>
+    <tr>
+      <td>Durante el día</td>
+      <td>Los bots operan solos; el operador monitorea el dashboard</td>
+      <td>Automático</td>
+    </tr>
+    <tr>
+      <td>14:50</td>
+      <td>Los bots detectan el cierre y empiezan a cerrar posiciones abiertas</td>
+      <td>Automático</td>
+    </tr>
+    <tr>
+      <td>15:00</td>
+      <td>Mercado cierra — los bots se detienen solos (EOD)</td>
+      <td>Automático</td>
+    </tr>
+    <tr>
+      <td>15:10</td>
+      <td>El operador corre la reconciliación y revisa el resumen del día</td>
+      <td>Manual</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">¿Qué requiere atención inmediata?</h3>
+<ul>
+  <li>Alerta roja en el dashboard (bot sin actividad +5 min)</li>
+  <li>Resultado de reconciliación con drift ≠ 0</li>
+  <li>Circuit Breaker activado (el log lo registra en detalle)</li>
+  <li>Posición abierta al cierre del mercado</li>
+</ul>
+
+
+<!-- ═══════════════════════════════════════════════
+     10. FLUJO DE GANANCIA
+═══════════════════════════════════════════════ -->
+<h2 class="section-title">10. ¿Cómo genera dinero el sistema?</h2>
+
+<p>
+  La fuente de ganancia es el <strong>spread capturado</strong> en cada par de operaciones:
+</p>
+
+<div class="box box-green">
+  <strong>Fuente de ganancia — ejemplo numérico</strong>
+  Spread objetivo DLR: 3.37 bps sobre un precio de $1480 = ~$0.50 por contrato.<br>
+  Cada contrato de DLR representa 1.000 USD nominales.<br>
+  Si el bot ejecuta 10 rondas (compra + venta) en un día:
+  10 × $0.50 = <strong>$5.00 por lote operado</strong>, sin importar si el dólar subió o bajó.
+</div>
+
+<p>La ganancia <strong>no depende de adivinar la dirección del mercado</strong>,
+sino de la cantidad de operaciones ejecutadas y del mantenimiento del spread.
+Por eso se llama estrategia de <em>market neutral</em>.</p>
+
+<h3 class="sub-title">Riesgos principales</h3>
+<ul>
+  <li>
+    <strong>Riesgo de inventario:</strong>
+    si el mercado se mueve rápido en una dirección, el bot puede acumular
+    posición antes de poder cerrarla, asumiendo pérdida marcada a mercado.
+  </li>
+  <li>
+    <strong>Selección adversa:</strong>
+    traders más informados pueden operar sistemáticamente contra el bot,
+    acumulando posición ganadora a expensas del bot.
+    (El sistema detecta y mitiga este riesgo automáticamente.)
+  </li>
+  <li>
+    <strong>Riesgo operativo:</strong>
+    caída de conexión, error de software, eventos extraordinarios de mercado.
+    Mitigado por los circuit breakers, la reconciliación y el sistema de heartbeat.
+  </li>
+</ul>
+
+
+<!-- ═══════════════════════════════════════════════
+     CIERRE
+═══════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h2 class="section-title">Resumen ejecutivo</h2>
+
+<div class="box box-blue">
+  <p>
+    El <strong>NOR Trading System</strong> es un sistema de <em>market making</em> automatizado
+    que opera en el mercado de futuros de Argentina (reMarkets ROFX).
+    Provee liquidez continua en contratos de dólar y soja,
+    cotizando precios de compra y venta simultáneamente y capturando
+    el spread entre ambos como ganancia.
+  </p>
+  <p style="margin-top:8px">
+    El sistema incluye múltiples capas de protección de riesgo
+    (límites de posición, circuit breakers, aplanamiento de emergencia,
+    reconciliación automática y heartbeat de salud),
+    lo que permite una operación casi autónoma con supervisión humana mínima.
+  </p>
+  <p style="margin-top:8px">
+    La estrategia es <strong>market neutral</strong>: el resultado no depende
+    de la dirección del dólar ni de la soja, sino del volumen de operaciones
+    y de la correcta gestión del inventario acumulado.
+  </p>
+</div>
+
+<div class="footer">
+  NOR Trading System — Documento interno — Junio 2026<br>
+  Para imprimir como PDF: Ctrl+P → Destino: "Guardar como PDF" → Guardar
+</div>
+
+<!-- INSTRUCCIÓN IMPRESIÓN -->
+<div class="no-print" style="margin-top:30px;padding:16px;background:#e8f0fe;border-radius:8px;font-size:10pt;text-align:center;">
+  <strong>Para generar el PDF:</strong> Ctrl+P (o Cmd+P en Mac) →
+  Cambiar destino a <em>"Guardar como PDF"</em> → Guardar.<br>
+  Recomendado: tamaño A4, márgenes normales, "Gráficos de fondo" activado.
+</div>
+
+</body>
+</html>

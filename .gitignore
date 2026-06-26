@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.idea/
+.vscode/
+*.log
+logs/
+data/bots_state*.json
+data/global_positions.json
+data/heartbeats/
