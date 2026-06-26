@@ -27,6 +27,7 @@ from config.cs_config import CalendarSpreadConfig
 from strategies.calendar_spread import CalendarSpreadEngine
 from utils.fill_logger import FillLogger
 from utils.global_risk import global_risk
+from utils.ticker_roller import get_active_ticker
 
 logger = setup_logger("run_cs")
 
@@ -356,8 +357,16 @@ def run_calendar_spread(cfg: CalendarSpreadConfig, no_time_check: bool = False) 
     if not connect():
         raise RuntimeError("Connection to reMarkets failed")
 
-    near_ticker = cfg.near_ticker
-    far_ticker = cfg.far_ticker
+    # Resolve tickers with automatic rolover: if base ticker is expired, get next
+    base_near = cfg.near_ticker
+    base_far = cfg.far_ticker
+    near_ticker = get_active_ticker(base_near)
+    far_ticker = get_active_ticker(base_far)
+    if near_ticker != base_near or far_ticker != base_far:
+        logger.info(
+            "CS tickers resolved with rollover | near: %s → %s | far: %s → %s",
+            base_near, near_ticker, base_far, far_ticker
+        )
 
     engine = CalendarSpreadEngine(cfg)
     session_date = datetime.now().strftime("%Y%m%d")

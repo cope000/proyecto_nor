@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from utils.ticker_roller import get_active_ticker
 
 
 @dataclass
